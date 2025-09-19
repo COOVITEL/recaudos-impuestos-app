@@ -15,7 +15,7 @@ type DialogProps = {
 }
 
 export default function DialogDatasPay({valueRecaudo, convenioNum, facturaNum, date, open, controlDialog, setOpen}: DialogProps) {
-
+  console.log(date);
   const [loading, setLoading] = useState(false)
   const [numRecaudo, setNumRecaudo] = useState("")
   const [successRegis, setSuccessRegis] = useState(false)
@@ -34,6 +34,7 @@ export default function DialogDatasPay({valueRecaudo, convenioNum, facturaNum, d
 
   async function sendRegister() {
     const { efectivo, cheque, medio, numCheque } = values;
+    console.log(values);
     const setEfectivo = efectivo === "" ? 0 : parseInt(efectivo.replace(/\./g, ""));
     const setCheque = cheque === "" ? 0 : parseInt(cheque.replace(/\./g, ""));
     const setMedio = medio === "" ? 0 : parseInt(medio.replace(/\./g, ""));

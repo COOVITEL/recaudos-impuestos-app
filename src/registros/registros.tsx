@@ -27,12 +27,16 @@ export default function Home() {
   const [controlDialog, setControlDialog] = useState(false)
  
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
+
     if (event.key === "Enter") {
+      
       window.removeEventListener("keydown", handleKeyDown);
       setStyleCode(false);
       setScanCode(false);
       if (code !== "") {
-        setDate(code.substring(50,  58));
+        
+        setDate(code.substring(53,  61));
+        
         const current = currentDate();
         if (parseInt(code.substring(50,  58)) < parseInt(current)) {
           setSpan(true);

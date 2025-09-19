@@ -11,6 +11,14 @@ export default defineConfig({
   output: 'server',
   adapter: vercel(),
   integrations: [react(), tailwind()],
-
+  
   adapter: vercel(),
 });
+
+/* 
+se puede dejar asi para compilarlo como esta subido en el 11
+export default defineConfig({
+  output: 'static',   // 👈 cambia aquí
+  integrations: [react(), tailwind()],
+});
+*/

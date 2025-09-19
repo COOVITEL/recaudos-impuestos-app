@@ -11,6 +11,7 @@ export function setValuePay(value: string) {
 
   // Quitar ceros a la izquierda
   strValue = strValue.replace(/^0+/, "");
+  strValue = strValue.replace(/\./g, "");
 
   // Si queda vacío, asignar "0"
   if (strValue === "") {
@@ -18,7 +19,7 @@ export function setValuePay(value: string) {
   }
 
   // Convertir a número y formatear con dos decimales
-  return Number(strValue).toFixed(2).toString();
+  return strValue;
 }
 
 function formatDateToString(): string {
@@ -40,6 +41,7 @@ function formatTimeToString(): string {
 }
 
 export function checkMessage(date: string, convenio: string, valuePay: string, factura: string) {
+	
   return {
 		"checkReference": { 
 			"rq": {
@@ -53,7 +55,7 @@ export function checkMessage(date: string, convenio: string, valuePay: string, f
 				"reference2": "", 
 				"terminalId": "0",
 				"currencyCode": "COP", 
-				"invoiceAmount": setValuePay(valuePay), 
+				"invoiceAmount": setValuePay(valuePay) + ".00", 
 				"payValue": setValuePay(valuePay), 
 				"genericTag1": "", 
 				"genericTag2": "", 
@@ -63,8 +65,10 @@ export function checkMessage(date: string, convenio: string, valuePay: string, f
 		}
 }
 
-export function notifyReferences(date: string, convenio: string,  valuePay: string, factura: string, numCheque: string, valueCash: string = "0.00", valueCheck: string = "0.00", valueOther: string = "0.00" ) {
-	return {
+export function notifyReferences(date: string, convenio: string,  valuePay: string, factura: string, numCheque: string, valueCash: string, valueCheck: string, valueOther: string ) {
+	console.log('probando datos de fecha: ', date);
+	
+	const total = {
 		"notifyReference": {
 			"rq": {
 				"channelId": "00",
@@ -84,17 +88,19 @@ export function notifyReferences(date: string, convenio: string,  valuePay: stri
 				"terminalId": "0",
 				"typeExchange": "0",
 				"currencyCode": "COP",
-				"payCheckAmount": setValuePay(valueCheck),
-				"cashAmount": setValuePay(valueCash),
-				"invoiceAmount": setValuePay(valuePay),
-				"otherPayAmount": setValuePay(valueOther),
-				"payValue": setValuePay(valuePay),
+				"payCheckAmount": setValuePay(valueCheck)+ ".00",
+				"cashAmount": setValuePay(valueCash)+ ".00",
+				"invoiceAmount": setValuePay(valuePay)+ ".00",
+				"otherPayAmount": setValuePay(valueOther)+ ".00",
+				"payValue": setValuePay(valuePay)+ ".00",
 				"genericTag1": "Informacion 1",
 				"genericTag2": "Informacion 2",
 				"genericTag3": "Informacion 3" ,
 			}
 		}
 	}
+	console.log(total);
+	return total
 }
 
 export function mediosDePago() {

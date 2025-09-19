@@ -26,6 +26,7 @@ export default function AddRegister({ date }: datesAddRegis) {
     const [loading, setLoading] = useState(false)
     
     const handleKeyDown = useCallback((event: KeyboardEvent) => {
+        
         if (event.key === "Enter") {
         window.removeEventListener("keydown", handleKeyDown);
         setStyleCode(false);

@@ -1,12 +1,12 @@
 export async function fetchTokenFromApi(): Promise<{ token: string; expiresInSeconds: number }> {
-  const url = '';
+  const url = 'https://enviomensajes.coovitel.coop/recaudos-tunja/authenticateRecaudos/';
 
   try {
     const res = await fetch(url, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': ' '
+        'Authorization': 'Token ddff2848bac631fe6aa460369e517ba7f95a66a2'
       },
     });
 
@@ -30,14 +30,14 @@ export async function fetchTokenFromApi(): Promise<{ token: string; expiresInSec
 }
 
 export async function fetchCheckReferenceApi(datas: any) {
-  const url = '';
+  const url = 'https://enviomensajes.coovitel.coop/recaudos-tunja/checkReference/';
   try {
     const res = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(datas),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': ''
+        'Authorization': 'Token ddff2848bac631fe6aa460369e517ba7f95a66a2'
       },
     });
 
@@ -60,14 +60,14 @@ export async function fetchCheckReferenceApi(datas: any) {
 }
 
 export async function fetchNotifyReferenceApi(datas: any) {
-  const url = '';
+  const url = 'https://enviomensajes.coovitel.coop/recaudos-tunja/notityReference/';
   try {
     const res = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(datas),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': ''
+        'Authorization': 'Token ddff2848bac631fe6aa460369e517ba7f95a66a2'
       },
     });
 
