@@ -15,7 +15,6 @@ type DialogProps = {
 }
 
 export default function DialogDatasPay({valueRecaudo, convenioNum, facturaNum, date, open, controlDialog, setOpen}: DialogProps) {
-  console.log(date);
   const [loading, setLoading] = useState(false)
   const [numRecaudo, setNumRecaudo] = useState("")
   const [successRegis, setSuccessRegis] = useState(false)

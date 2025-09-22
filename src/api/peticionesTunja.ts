@@ -1,3 +1,5 @@
+const token = import.meta.env.PUBLIC_COOVITEL_TOKEN;
+
 export async function fetchTokenFromApi(): Promise<{ token: string; expiresInSeconds: number }> {
   const url = 'https://enviomensajes.coovitel.coop/recaudos-tunja/authenticateRecaudos/';
 
@@ -6,7 +8,7 @@ export async function fetchTokenFromApi(): Promise<{ token: string; expiresInSec
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Token ddff2848bac631fe6aa460369e517ba7f95a66a2'
+        'Authorization': `Token ${token}`,
       },
     });
 
@@ -37,7 +39,7 @@ export async function fetchCheckReferenceApi(datas: any) {
       body: JSON.stringify(datas),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Token ddff2848bac631fe6aa460369e517ba7f95a66a2'
+        'Authorization': `Token ${token}`,
       },
     });
 
@@ -67,7 +69,7 @@ export async function fetchNotifyReferenceApi(datas: any) {
       body: JSON.stringify(datas),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Token ddff2848bac631fe6aa460369e517ba7f95a66a2'
+        'Authorization': `Token ${token}`,
       },
     });
 

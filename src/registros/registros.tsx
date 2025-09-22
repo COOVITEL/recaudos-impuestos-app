@@ -34,8 +34,10 @@ export default function Home() {
       setStyleCode(false);
       setScanCode(false);
       if (code !== "") {
+        console.log(code);
         
-        setDate(code.substring(53,  61));
+        setDate(code.substring(50,  58));
+        console.log(code.substring(50,  58));
         
         const current = currentDate();
         if (parseInt(code.substring(50,  58)) < parseInt(current)) {

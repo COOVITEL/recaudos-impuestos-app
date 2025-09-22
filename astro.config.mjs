@@ -16,6 +16,7 @@ export default defineConfig({
 });
 
 /* 
+----------  ANTES DE COMPILARLO HACER ESTOS CAMBIOS SI NO ESTAS EN UN ENTORNO VERCEL!!
 se puede dejar asi para compilarlo como esta subido en el 11
 export default defineConfig({
   output: 'static',   // 👈 cambia aquí

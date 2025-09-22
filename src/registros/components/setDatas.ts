@@ -22,7 +22,7 @@ export default async function setDatas({ convenioNum, valueRecaudo, facturaNum, 
       "registroDetalle": RegisterDetail(facturaNum, valueRecaudo),
       "fecha": fechaCur
   }
-
+  
     try {
       await createRegister(registerDatas);
       const res = await getAllRegister()
