@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación - Recaudos Impuestos App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #4CAF50;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+        section {
+            padding: 2rem;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+        footer {
+            background: #f4f4f4;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Recaudos Impuestos App</h1>
+        <p>Documentación de la aplicación</p>
+    </header>
+    <section>
+        <h2>Descripción</h2>
+        <p>Esta aplicación está diseñada para gestionar y automatizar el proceso de recaudo de impuestos. Proporciona herramientas para registrar, consultar y analizar los datos relacionados con los impuestos de manera eficiente.</p>
+    </section>
+    <section>
+        <h2>Características</h2>
+        <ul>
+            <li>Registro de contribuyentes y sus impuestos.</li>
+            <li>Consulta de historial de pagos.</li>
+            <li>Generación de reportes personalizados.</li>
+            <li>Interfaz amigable y fácil de usar.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>Requisitos</h2>
+        <ul>
+            <li>Node.js y npm instalados.</li>
+            <li>Servidor web compatible.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>Instalación</h2>
+        <ol>
+            <li>Clona el repositorio: <code>git clone https://github.com/usuario/recaudos-impuestos-app.git</code></li>
+            <li>Accede al directorio del proyecto: <code>cd recaudos-impuestos-app</code></li>
+            <li>Instala las dependencias: <code>npm install</code></li>
+            <li>Configura las variables de entorno según el archivo <code>env.d.ts</code>.</li>
+            <li>Inicia la aplicación: <code>npm start</code></li>
+        </ol>
+    </section>
+    <section>
+        <h2>Uso</h2>
+        <p>Una vez instalada, accede a la aplicación desde tu navegador en el puerto configurado (por defecto <code>http://localhost:4000</code>, o el puerto especificado en el archivo <code>env.d.ts</code>).</p>
+    </section>
+    <section>
+        <h2>Guía del Proyecto</h2>
+        <h3>Estructura del Proyecto</h3>
+        <ul>
+            <li><strong>APIs:</strong> Las peticiones principales están en la carpeta <code>api/</code>. Ejemplos:
+                <ul>
+                    <li><code>peticionesTunja.ts</code>: Maneja las peticiones relacionadas con la ciudad de Tunja.</li>
+                    <li><code>registersRecaudos.ts</code>: Gestiona los registros de recaudos.</li>
+                </ul>
+            </li>
+            <li><strong>Componentes:</strong> Los componentes reutilizables están en <code>registros/components/</code>. Ejemplos:
+                <ul>
+                    <li><code>Barcode.tsx</code>: Maneja la lectura de códigos de barras.</li>
+                    <li><code>HeaderLote.ts</code>: Genera encabezados para lotes de registros.</li>
+                </ul>
+            </li>
+            <li><strong>Páginas:</strong> Las vistas principales están en <code>pages/</code>. Ejemplos:
+                <ul>
+                    <li><code>index.astro</code>: Página principal.</li>
+                    <li><code>operaciones.astro</code>: Página para gestionar operaciones.</li>
+                    <li><code>registros.astro</code>: Página para consultar registros.</li>
+                </ul>
+            </li>
+            <li><strong>Utilidades:</strong> Funciones auxiliares están en <code>utils/</code>. Ejemplos:
+                <ul>
+                    <li><code>JsonMessages.ts</code>: Maneja mensajes en formato JSON.</li>
+                    <li><code>state.ts</code>: Gestiona el estado global de la aplicación.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Configuraciones Importantes</h3>
+        <ul>
+            <li><strong>Puerto:</strong> El puerto de la aplicación se configura en <code>env.d.ts</code>. Por defecto, la aplicación corre en <code>http://localhost:4000</code>.</li>
+            <li><strong>Tokens:</strong> Los tokens de autenticación se gestionan en las peticiones de la carpeta <code>api/</code>. Asegúrate de revisar los encabezados de las solicitudes.</li>
+        </ul>
+        <h3>Datos y APIs</h3>
+        <ul>
+            <li><strong>Datos del código de barras:</strong> Los datos leídos del código de barras se procesan en <code>registros/components/Barcode.tsx</code> y se almacenan en la base de datos configurada.</li>
+            <li><strong>APIs:</strong> Las rutas de las APIs están definidas en los archivos de la carpeta <code>api/</code>. Ejemplo:
+                <ul>
+                    <li><code>registersRecaudos.ts</code>: API para gestionar registros de recaudos.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Errores Comunes</h3>
+        <ul>
+            <li><strong>Base de datos no conectada:</strong> Verifica que el servicio de la base de datos esté corriendo y que las credenciales en <code>env.d.ts</code> sean correctas.</li>
+            <li><strong>Token inválido:</strong> Asegúrate de que el cliente envíe el token correcto en el encabezado <code>Authorization</code>.</li>
+        </ul>
+    </section>
+    <footer>
+        <p>&copy; 2025 Recaudos Impuestos App. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
