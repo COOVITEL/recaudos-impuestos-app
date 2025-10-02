@@ -1,4 +1,5 @@
 import axios from "axios";
+const tokenRecaudos = import.meta.env.PUBLIC_COOVITEL_TOKEN;
 
 export interface RegistersDates {
     encabezadoArchivo: string
@@ -9,7 +10,11 @@ export interface RegistersDates {
 }
 
 const registerRecaudo = axios.create({
-    baseURL: 'http://localhost:8000/registers/api/v1/registers/'
+    baseURL: 'https://192.168.1.16:8004/registers/api/v1/registers/',
+    headers: {
+        'Authorization': `Token ${tokenRecaudos}`,
+      },
+
 })
 
 export const createRegister = (dates: RegistersDates) => registerRecaudo.post('/', dates)

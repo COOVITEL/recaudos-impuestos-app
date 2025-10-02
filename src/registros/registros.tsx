@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { currentDate } from "./components/date";
 import Barcode from "./components/Barcode";
-import setDatas from "./components/setDatas";
+import { useTokenStore } from "../utils/state";
+import { fetchCheckReferenceApi, fetchTokenFromApi } from "../api/peticionesTunja";
+import { checkMessage } from "../utils/JsonMessages";
+import DialogDatasPay from "./components/modalDatas";
 
 
 export default function Home() {
@@ -14,20 +17,28 @@ export default function Home() {
   const [convenio, setConvenio] = useState("")
   const [styleCode, setStyleCode] = useState(false)
   const [span, setSpan] = useState(false)
-  const [button, setButton] = useState(false)
-  const [successRegis, setSuccessRegis] = useState(false)
-  const [faildRegis, setFaildRegis] = useState(false)
-  const [faildRegisForExist, setFaildRegisForExist] = useState(false)
   const [scanCode, setScanCode] = useState(false)
-  const [numRecaudo, setNumRecaudo] = useState("")
+  const [loadingToken, setLoadingToken] = useState(false);
+  const [errorAuth, setErrorAuth] = useState<boolean>(false);
+  const [validReferenceResponse, setValidReferenceResponse] = useState<Record<string, any>>({});
+  const [controlValidateReference, setControlValidateReference] = useState<boolean>(false)
+  const { setToken, tokenAuth, tokenTime } = useTokenStore()
+  const [open, setOpen] = useState(false)
+  const [controlDialog, setControlDialog] = useState(false)
  
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
+
     if (event.key === "Enter") {
+      
       window.removeEventListener("keydown", handleKeyDown);
       setStyleCode(false);
       setScanCode(false);
       if (code !== "") {
+        console.log(code);
+        
         setDate(code.substring(50,  58));
+        console.log(code.substring(50,  58));
+        
         const current = currentDate();
         if (parseInt(code.substring(50,  58)) < parseInt(current)) {
           setSpan(true);
@@ -35,24 +46,22 @@ export default function Home() {
           setValuePay(code.substring(38,  48));
           setFactura(code.substring(20,  34));
           setConvenio(code.substring(3,  16));
-          setButton(true);
+          setControlValidateReference(true);
         }
       }
       return;
     }
     if (event.key !== "Alt" && event.key !== "(" && event.key !== ")") {
-      if (count === 34) {
-        console.log(event.key)
-      }
-      if ((count ===  34 || count ===  51) && event.key === "0") {
+
+      if ((count ===  34) && event.key === "0") {
         setCount((prevCount) => prevCount +  1);
         return;
       }
-      if ((count ===  35 || count ===  52) && event.key === "2") {
+      if ((count ===  35) && event.key === "2") {
         setCount((prevCount) => prevCount +  1);
         return;
       }
-      if ((count ===  36 || count ===  53) && event.key === "9") {
+      if ((count ===  36) && event.key === "9") {
         setCount((prevCount) => prevCount +  1);
         return;
       } else {
@@ -61,6 +70,7 @@ export default function Home() {
       }
     }
   }, [code, count]);
+
   useEffect(() => {
     if (styleCode) {
       window.addEventListener("keydown", handleKeyDown);
@@ -74,6 +84,8 @@ export default function Home() {
   }, [styleCode, count, handleKeyDown]);
  
   function cleanDates() {
+    setControlDialog(false)
+    setOpen(false)
     setCode("")
     setConvenio("")
     setCount(0)
@@ -81,33 +93,72 @@ export default function Home() {
     setDate("")
     setFactura("")
     setSpan(false)
-    setButton(false)
   }
 
-  function ListenCode() {
-    setScanCode(true)
-    setSuccessRegis(false)
-    setFaildRegis(false)
-    cleanDates()
-    setStyleCode((prevStyleCode) => !prevStyleCode);
-  }
-
-  async function sendRegister() {
+  async function ListenCode() {
+    setOpen(false)
+    setControlValidateReference(false);
+    setValidReferenceResponse({})
+    setErrorAuth(false);
     cleanDates();
-    setButton(false);
-    const result = await setDatas({ convenio, valuePay, factura }) as any;
-    if (result.success) {
-      setNumRecaudo(result.data);
-      setSuccessRegis(true);
+    if (!scanCode) {
+      setLoadingToken(true);
+      try {
+        if (tokenTime !== "") {
+          const now = new Date();
+          const tokenExp = new Date(tokenTime);
+          if (now < tokenExp) {
+            setScanCode(true);
+            setStyleCode((prev) => !prev);
+            setLoadingToken(false);
+            return;
+          }
+        }
+        const {token , expiresInSeconds} = await fetchTokenFromApi()
+        if (token === "") {
+          setErrorAuth(true)
+        } else {
+          setToken(token, expiresInSeconds);
+          setScanCode(true);
+          setStyleCode((prev) => !prev);
+        }
+
+        // ya está guardado en el store por ensureToken()/fetchNewToken
+        // aquí puedes continuar con la lógica que depende del token
+      } catch (err: any) {
+        console.error('Error obteniendo token:', err);
+        setErrorAuth(true);
+        // opcional: revertir scanCode o mostrar UI
+      } finally {
+        setLoadingToken(false);
+      }
     } else {
-      if (result.exist) {
-        setFaildRegisForExist(true);
+      setScanCode(false);
+      setStyleCode(false);
+    }
+  }
+
+  async function checkReference() {
+    const info = checkMessage(date, convenio, valuePay, factura);
+    const data = {
+      "info": info,
+      "token": tokenAuth,
+    }
+    const response = await fetchCheckReferenceApi(data);
+    if (response) {
+      const resMessage = response.response.checkReference.rs
+      setScanCode(false);
+      setStyleCode(false);
+      setControlValidateReference(false);
+      if (resMessage.statusCode == '0000') {
+        setValidReferenceResponse({"message": "La referencias es valida", "statusCode": resMessage.statusCode});
+        setControlDialog(true);
+        setOpen(true);
       } else {
-        setFaildRegis(true);
+        setValidReferenceResponse({"message": resMessage.statusDesc, "statusCode": resMessage.statusCode});
       }
     }
   }
-  
 
   return (
       <div className="flex flex-col justify-center items-center bg-white py-5 px-10 rounded-2xl">
@@ -118,15 +169,25 @@ export default function Home() {
           <Barcode />
           <h1 className="text-center pb-5">Escanear codigo</h1>
         </div>
+          <DialogDatasPay
+            valueRecaudo={valuePay}
+            convenioNum={convenio}
+            facturaNum={factura}
+            date={date}
+            open={open}
+            setOpen={setOpen}
+            controlDialog={controlDialog}
+          />
+          <p className={`text-2xl font-semibold pb-4 ${validReferenceResponse.statusCode === '0000' ? 'text-green-600' : 'text-red-600'}`}>
+            {validReferenceResponse.message}
+          </p>
+          {errorAuth&& <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Error de autenticacion</span>}
+          {loadingToken&&<p className="text-2xl font-semibold">Comprobando ..</p>}
           {span && <h4 className={`text-5xl text-red-600 mb-5`}>La fecha de pago expiro</h4>}
-          {successRegis && <span className="text-2xl border-b-2 border-[#007eb8] text-[#007eb8] font-semibold">Registro de Recaudo Exitoso - # {numRecaudo.toString().padStart(5, "0")}</span>}
-          {faildRegis && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Registro de Recaudo Fallido</span>}
-          {faildRegisForExist && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Ya existe un registro con el numero de recibo</span>}
           {scanCode && <span className="text-2xl font-mono font-semibold">Por favor escanee el codigo</span>}
         <div className="flex flex-col items-center justify-center">
           <h3><strong>Codigo:</strong>
             {code}
-            {/* {`${code.substring(0, 3)}-${code.substring(3, 16)}-${code.substring(16, 20)}-${code.substring(20, 34)}-${code.substring(34, 38)}-${code.substring(38, 48)}--${code.substring(48, 51)}-${code.substring(51, 58)}`} */}
           </h3>
           <h3><strong>Fecha:</strong> {date}</h3>
           <h3><strong>Monto:</strong> {valuePay}</h3>
@@ -134,12 +195,15 @@ export default function Home() {
           <h3><strong>Convenio:</strong> {convenio}</h3>
         </div>
 
-        <button
-          className={`cursor-pointer text-2xl mt-4 px-4 py-2 rounded-md bg-[#007eb8] text-white border-2 hover:bg-[#2d2e83] transition duration-300 hover:scale-105 ${button ? '' : 'hidden'}`}
-          onClick={() => sendRegister()}
-          >
-          Enviar
-        </button>
+        {
+          controlValidateReference &&
+          <button
+            className={`cursor-pointer text-2xl mt-4 px-4 py-2 rounded-md bg-[#007eb8] text-white border-2 hover:bg-[#2d2e83] transition duration-300 hover:scale-105`}
+            onClick={() => checkReference()}
+            >
+            Validar Recibo
+          </button>
+        }
         </div>
   );
 }

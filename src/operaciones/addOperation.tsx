@@ -23,8 +23,10 @@ export default function AddRegister({ date }: datesAddRegis) {
     const [faildRegis, setFaildRegis] = useState(false)
     const [scanCode, setScanCode] = useState(false)
     const [numRecaudo, setNumRecaudo] = useState("")
+    const [loading, setLoading] = useState(false)
     
     const handleKeyDown = useCallback((event: KeyboardEvent) => {
+        
         if (event.key === "Enter") {
         window.removeEventListener("keydown", handleKeyDown);
         setStyleCode(false);
@@ -43,15 +45,15 @@ export default function AddRegister({ date }: datesAddRegis) {
         return;
         }
         if (event.key !== "Alt" && event.key !== "(" && event.key !== ")") {
-        if ((count ===  34 || count ===  51) && event.key === "0") {
+        if ((count ===  34) && event.key === "0") {
             setCount((prevCount) => prevCount +  1);
             return;
         }
-        if ((count ===  35 || count ===  52) && event.key === "2") {
+        if ((count ===  35) && event.key === "2") {
             setCount((prevCount) => prevCount +  1);
             return;
         }
-        if ((count ===  36 || count ===  53) && event.key === "9") {
+        if ((count ===  36) && event.key === "9") {
             setCount((prevCount) => prevCount +  1);
             return;
         } else {
@@ -91,13 +93,16 @@ export default function AddRegister({ date }: datesAddRegis) {
     }
 
     async function sendRegister() {
+        setLoading(true)
         cleanDates();
         setButton(false);
         const result = await setDatas({ convenio, valuePay, factura, fecha }) as any;
         if (result.success) {
+            setLoading(false)
             setNumRecaudo(result.data)
             setSuccessRegis(true);
         } else {
+            setLoading(false)
             if (result.exist) {
                 setFaildRegisForExist(true);
             } else {
@@ -119,6 +124,7 @@ export default function AddRegister({ date }: datesAddRegis) {
           <Barcode />
           <h1 className="text-center pb-5">Escanear codigo</h1>
         </div>
+          {loading&&<p className="text-2xl font-semibold">Enviando...</p>}
           {span && <h4 className={`text-5xl text-red-600 mb-5`}>La fecha de pago expiro</h4>}
           {successRegis && <span className="text-2xl border-b-2 border-[#007eb8] text-[#007eb8] font-semibold">Registro de Recaudo Exitoso - # {numRecaudo.toString().padStart(5, "0")}</span>}
           {faildRegis && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Registro de Recaudo Fallido</span>}

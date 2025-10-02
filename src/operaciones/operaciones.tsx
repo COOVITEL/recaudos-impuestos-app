@@ -54,6 +54,7 @@ export default function Operations() {
 
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let date = event.target.value
+        
         setFoundRegisters(false)
         setDisplayDates(false)
         setDownloadButton(false)
