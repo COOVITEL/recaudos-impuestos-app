@@ -35,8 +35,9 @@ export default function Home() {
       setScanCode(false);
       if (code !== "") {
         console.log(code);
-        
-        setDate(code.substring(50,  58));
+        const date_exp = code.toString().slice(-8);
+        console.log(date_exp);
+        setDate(date_exp);
         console.log(code.substring(50,  58));
         
         const current = currentDate();

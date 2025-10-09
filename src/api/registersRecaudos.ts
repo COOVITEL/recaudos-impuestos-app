@@ -10,7 +10,7 @@ export interface RegistersDates {
 }
 
 const registerRecaudo = axios.create({
-    baseURL: 'https://192.168.1.16:8004/registers/api/v1/registers/',
+    baseURL: 'http://obsequios.coovitel.local:8024/registers/api/v1/registers/',
     headers: {
         'Authorization': `Token ${tokenRecaudos}`,
       },

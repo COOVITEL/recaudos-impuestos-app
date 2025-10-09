@@ -66,7 +66,7 @@ export function checkMessage(date: string, convenio: string, valuePay: string, f
 }
 
 export function notifyReferences(date: string, convenio: string,  valuePay: string, factura: string, numCheque: string, valueCash: string, valueCheck: string, valueOther: string ) {
-	console.log('probando datos de fecha: ', date);
+	console.log('probando datos de fecha_exp: ', date);
 	
 	const total = {
 		"notifyReference": {
