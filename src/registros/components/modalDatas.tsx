@@ -239,8 +239,6 @@ export default function DialogDatasPay({valueRecaudo, convenioNum, facturaNum, d
             <div className="flex flex-col items-center justify-center mb-4">
               {loading&&<p className="text-2xl font-semibold">Enviando...</p>}
               {successRegis && <span className="text-2xl border-b-2 border-[#007eb8] text-[#007eb8] font-semibold">Registro de Recaudo Exitoso - # {numRecaudo.toString().padStart(5, "0")}</span>}
-              {faildRegisForExist && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Ya existe un registro con el numero de recibo en la base de datos Coovitel</span>}
-              {faildRegis && <span className="text-2xl border-b-2 border-red-600 text-red-600 font-semibold">Registro de Recaudo Fallido en la base de datos Coovitel</span>}
               {errorRegister != "" && <span className="text-xl border-b-2 border-red-600 text-red-600 font-semibold">{errorRegister}</span>}
               {successNotify != "" && <span className="text-xl border-b-2 border-blue-600 text-blue-600 font-semibold">{errorRegister}</span>}
             </div>
