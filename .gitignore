@@ -4,6 +4,9 @@ recaudosApp_v2/
 recaudosApp/
 recaudosApp1/
 testProyect
+.vercel/
+recaudosApptest/
+recaudosTunja/
 
 # generated types
 .astro/
